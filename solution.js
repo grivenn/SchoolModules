@@ -4,9 +4,25 @@ export function getObserverCallback(updateBreadcrumbs) {
   return getHeadersIdList;
 }
 
-function getHeadersIdList() {
-  const { target } = this;
-  currentHeader = target.id;
+function getHeadersIdList(entries) {
+  incomHdsList = [];
+
+  let visibleHdEntryList = entries.filter((x) => x.isIntersecting);
+  visibleHdEntryList.forEach((entry) => {
+    incomHdsList.push({
+      id: entry.target.id,
+      lvl: entry.target.dataset.header,
+    });
+  });
+
+  const highestLvl = Math.max(...Array.from(incomHdsList, ({ lvl }) => lvl));
+  const currentHeader = Math.min(
+    ...Array.from(
+      incomHdsList.filter((x) => x.lvl == highestLvl),
+      ({ id }) => id
+    )
+  );
+
   if (!currentHeader) return;
 
   let BreadcrumbsArr = [];
@@ -30,7 +46,6 @@ function getHeadersIdList() {
   BreadcrumbsArr.reverse();
   updateBreadcrumbs(BreadcrumbsArr);
 }
-
 
 // парсинг div[data-header]
 function parse(allHeadersList) {
