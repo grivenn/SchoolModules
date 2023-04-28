@@ -26,7 +26,11 @@ export function getObserverCallback(updateBreadcrumbs, currentHeader = null) {
 }
 
 
+// =====================================================================================
 // парсинг div[data-header]
+
+// Думаю, что по уму, результат парсинга надо где-то кэшировать, что бы не перелопачивать его каждый раз.
+
 function parse(allHeadersList) {
     let parentId = 0;
     let parentLevel = 1;
